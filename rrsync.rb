@@ -58,6 +58,7 @@ run_time = Benchmark.realtime do
       logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout == ''
       logger.error("#{rsync_cmd}\n#{tmp_stderr}") unless tmp_stderr == ''
     }
+    FileUtils.rmdir("#{EMPTY_DIR}") if File.exist?("#{EMPTY_DIR}")
   rescue Errno::EACCES, Errno::ENOENT, Exception => e
     logger.fatal(e.to_s)
   end
