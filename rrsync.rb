@@ -7,12 +7,12 @@ require 'ping'
 
 #============================= OPTIONS ==============================#
 # == Options for local machine.
-SSH_APP       = '/usr/bin/ssh'
-RSYNC_APP     = '/opt/local/bin/rsync'
+SSH_APP       = 'ssh'
+RSYNC_APP     = 'rsync'
 
 EXCLUDE_FILE  = '/path/to/.rsyncignore'
 DIR_TO_BACKUP = '/folder/to/backup'
-LOG_FILE      = '/tmp/backup_home.log'
+LOG_FILE      = '/var/log/rrsync.log'
 LOG_AGE       = 'daily'
 
 EMPTY_DIR     = '/tmp/empty_rsync_dir/' #NEEDS TRAILING SLASH.
