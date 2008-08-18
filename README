@@ -1,0 +1,123 @@
+RRSync (Ruby RSync)
+
+RRsync is a Rsync backup script that's written in Ruby. It performs the simple operation of syncing the contents of a given folder to a remote location via SSH. The script allows you to control the level of output (log files, screen output) , it is ideal for calling from a cron or launchd.
+
+The backups are structured as such:
+
+/remote/location/current - The current folder contains the the latest clone of the intended backup folder.
+/remote/location/backup_dir - The backup directory, which by default is the current day (monday, tuesday, etc) contains the difference to current since it was last run. So it will contain any new files, any files that were deleted.
+
+
+NOTICE: I take no responsibility for any data loss, so please test before using with test data!!!!!
+
+Please feel free to contribute to this script and I'll accept any changes for the good.
+==============================================================================
+
+== How to install
+
+A few things are required for this script to function correctly.
+	* Ruby 1.8.x
+	* rsync 3.0.x
+	* open4 ruby gem
+	* ssh command
+	
+To install the open4 gem run:
+
+	sudo gem install open4
+	
+Rsync on OS X 10.5:
+
+On OS X 10.5 the default rsync is out of date and missing a few used options you may use macports to install the latest.
+	
+	sudo port install rsync
+	
+To install the script simply copy it to where ever you wish to run the script from. Make sure its executable by issuing the following:
+
+	sudo chmod 755 rrsync.rb
+
+	
+== How to use
+
+You may run the script by issuing the following command:
+
+	ruby rrsync.rb
+or (providing it has execute permissions)
+	./rrsync.rb
+
+See examples/ for examples of crontab and launchd settings.	
+
+= Configuration options
+
+= SSH_APP
+This is the command to use for ssh, full path should not be needed but might be wise.
+
+= RSYNC_APP
+This is the command to use for rsync, full path should not be needed but might be wise.
+
+= EXCLUDE_FILE
+This is the location of a file which contents of files and directories to exclude from the backup.
+
+The file should be formatted with each file or directory on it's own line. The list needs to be relative to DIR_TO_BACKUP.
+
+= DIR_TO_BACKUP
+This is the location folder you wish to backup to a remote machine for example: /Users/foo
+
+If you wish to have the contents of the remote backup like /remote/backup/documents instead of /remote/backup/foo/documents then you need to add a trailing slash to this command, for example: /Users/foo/
+
+= LOG_FILE
+This is the location to put the log file, if you wish not to create a log file you may leave this blank. You can also achieve this with the SLIENT option (see below for more details).
+
+= LOG_AGE
+This is how long to keep log files for you can supply daily, weekly or monthly here.
+
+= EMPTY_DIR
+This is NEEDED to clean out the previous weeks backup folder. The script will create the folder and delete it after.
+
+You can choose the location of this folder (needs write permission), the default of /tmp/empty_dir is normally OK.
+
+= SSH_USER
+The ssh user you wish to use for the remote machine example: rich would be turned into rich@SSH_SERVER.
+
+= SSH_SERVER
+The hostname or ip of the remote machine where the backups are copied too for example: 192.168.1.2 would be turned into SSH_USER@192.168.1.2
+
+= SSH_PORT
+If you run ssh on a non-standard port you may supply that here.
+
+= BACKUP_ROOT
+This is the location to store the backups on the remote machine. You  do not need to add the current or BACKUP_DIR part, example: /media/backups/macbook
+
+= BACKUP_DIR
+This can normally be left as default. This controls where to put the differences to current by default this is monday, tuesday, etc...
+
+= RSYNC_VERBOSE
+This allows you to control how much output rsync gives, this does not effect if logs are produced (see SLIENT and DEBUG) you may use: --progress, -v, -vv, -vvv here to give different levels of output from rsync.
+
+= RSYNC_OPTS
+This can normally be left as default. Change this if you know what you're doing this allows you to change the options that are passed to rsync (see man rsync).
+
+= DEBUG
+If enabled then output will be shown to the screen and will NOT be outputed to the log file. This is useful for testing and debugging any problems you might have.
+
+This can be either: true or false
+
+= SLIENT
+If you wish to have no output at all (screen and log files) then set this to true.
+
+This can be either: true or false
+
+==============================================================================
+
+== Pitfalls 
+
+	* This is not supported on WINDOWS! I don't think it will work at all!
+	* Only supports SSH as the transfer protocol
+	* Doesn't allow much in the way of the default directory structure of current folder and a backup (normally monday, tuesday, etc)
+	
+== Contact/contribute
+
+Feel free to fork and send me pull requests I will most likely merge the changes into the main repo.
+
+You can contact me at http://27smiles.com or drop me an email at rich -at- 27smiles.com.
+
+==============================================================================
