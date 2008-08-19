@@ -26,12 +26,12 @@ RSYNC_VERBOSE = '-v'
 RSYNC_OPTS    = "--force --ignore-errors --delete-excluded --exclude-from=#{EXCLUDE_FILE} --delete --backup --backup-dir=#{BACKUP_DIR} -a"
 # == Options to control output
 DEBUG         = true #If true output to screen else output is sent to log file.
-SLIENT        = false #Total slient = no log or screen output.
+SILENT        = false #Total silent = no log or screen output.
 #========================== END OF OPTIONS ==========================#
 
-if DEBUG && !SLIENT
+if DEBUG && !SILENT
   logger = Logger.new(STDOUT, LOG_AGE)
-elsif LOG_FILE != '' && !SLIENT
+elsif LOG_FILE != '' && !SILENT
   logger = Logger.new(LOG_FILE, LOG_AGE)
 else
   logger = Logger.new(nil)
