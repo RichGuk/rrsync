@@ -36,7 +36,7 @@ elsif LOG_FILE != '' && !SILENT
 else
   logger = Logger.new(nil)
 end
-ssh_port = SSH_PORT == '' ? '' : "-e 'ssh -p #{SSH_PORT}'"
+ssh_port = SSH_PORT.empty? ? '' : "-e 'ssh -p #{SSH_PORT}'"
 rsync_cleanout_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} --delete -a #{EMPTY_DIR} #{SSH_USER}@#{SSH_SERVER}:#{BACKUP_DIR}"
 rsync_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} #{RSYNC_OPTS} #{DIR_TO_BACKUP} #{SSH_USER}@#{SSH_SERVER}:#{BACKUP_ROOT}/current"
 
@@ -49,14 +49,14 @@ run_time = Benchmark.realtime do
     Open4::popen4("#{rsync_cleanout_cmd}") { |pid, stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
-      logger.info("#{rsync_cleanout_cmd}\n#{tmp_stdout}") unless tmp_stdout == ''
-      logger.error("#{rsync_cleanout_cmd}\n#{tmp_stderr}") unless tmp_stderr == ''
+      logger.info("#{rsync_cleanout_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
+      logger.error("#{rsync_cleanout_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
     }
     Open4::popen4("#{rsync_cmd}") { |pid, stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
-      logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout == ''
-      logger.error("#{rsync_cmd}\n#{tmp_stderr}") unless tmp_stderr == ''
+      logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
+      logger.error("#{rsync_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
     }
     FileUtils.rmdir("#{EMPTY_DIR}") if File.exist?("#{EMPTY_DIR}")
   rescue Errno::EACCES, Errno::ENOENT, Exception => e
