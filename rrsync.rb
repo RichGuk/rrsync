@@ -45,7 +45,7 @@ run_time = Benchmark.realtime do
   begin
     raise Exception, "Unable to find remote host (#{SSH_SERVER})" unless Ping.pingecho(SSH_SERVER)
        
-    FileUtils.mkdir("#{EMPTY_DIR}") unless File.exist?("#{EMPTY_DIR}")
+    FileUtils.mkdir_p("#{EMPTY_DIR}")
     Open4::popen4("#{rsync_cleanout_cmd}") { |pid, stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
@@ -58,8 +58,8 @@ run_time = Benchmark.realtime do
       logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
       logger.error("#{rsync_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
     }
-    FileUtils.rmdir("#{EMPTY_DIR}") if File.exist?("#{EMPTY_DIR}")
-  rescue Errno::EACCES, Errno::ENOENT, Exception => e
+    FileUtils.rmdir("#{EMPTY_DIR}")
+  rescue Errno::EACCES, Errno::ENOENT, Errno::ENOTEMPTY, Exception => e
     logger.fatal(e.to_s)
   end
 end
