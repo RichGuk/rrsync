@@ -1,9 +1,10 @@
 #!/usr/bin/ruby
 require 'rubygems'
 require 'Logger'
-require 'open4'
 require 'benchmark'
 require 'ping'
+require 'FileUtils'
+require 'open3'
 
 #============================= OPTIONS ==============================#
 # == Options for local machine.
@@ -46,13 +47,13 @@ run_time = Benchmark.realtime do
     raise Exception, "Unable to find remote host (#{SSH_SERVER})" unless Ping.pingecho(SSH_SERVER)
        
     FileUtils.mkdir_p("#{EMPTY_DIR}")
-    Open4::popen4("#{rsync_cleanout_cmd}") { |pid, stdin, stdout, stderr|
+    Open3::popen3("#{rsync_cleanout_cmd}") { |stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
       logger.info("#{rsync_cleanout_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
       logger.error("#{rsync_cleanout_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
     }
-    Open4::popen4("#{rsync_cmd}") { |pid, stdin, stdout, stderr|
+    Open3::popen3("#{rsync_cmd}") { |stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
       logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
