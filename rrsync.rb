@@ -22,11 +22,11 @@ SSH_SERVER    = 'HOSTNAME or IP'
 SSH_PORT      = '' #Leave blank for default (port 22).
 BACKUP_ROOT   = '/path/on/remote/machine/to/backup/folder'
 BACKUP_DIR    = BACKUP_ROOT + '/' + Time.now.strftime('%A').downcase
-RSYNC_VERBOSE = '--progress'
+RSYNC_VERBOSE = '-v'
 RSYNC_OPTS    = "--force --ignore-errors --delete-excluded --exclude-from=#{EXCLUDE_FILE} --delete --backup --backup-dir=#{BACKUP_DIR} -a"
 # == Options to control output
 DEBUG         = true #If true output to screen else output is sent to log file.
-SLIENT        = false #Totall slient = no log or screen output.
+SLIENT        = false #Total slient = no log or screen output.
 #========================== END OF OPTIONS ==========================#
 
 if DEBUG && !SLIENT

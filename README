@@ -91,7 +91,7 @@ This is the location to store the backups on the remote machine. You  do not nee
 This can normally be left as default. This controls where to put the differences to current by default this is monday, tuesday, etc...
 
 = RSYNC_VERBOSE
-This allows you to control how much output rsync gives, this does not effect if logs are produced (see SLIENT and DEBUG) you may use: --progress, -v, -vv, -vvv here to give different levels of output from rsync.
+This allows you to control how much output rsync gives, this does not effect if logs are produced (see SLIENT and DEBUG) you may use: --progress, -v, -vv, -vvv here to give different levels of output (note: --progress may clutter the logs)
 
 = RSYNC_OPTS
 This can normally be left as default. Change this if you know what you're doing this allows you to change the options that are passed to rsync (see man rsync).
