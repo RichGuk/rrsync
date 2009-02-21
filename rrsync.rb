@@ -42,7 +42,7 @@ rsync_cleanout_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} --delete -a #{EM
 rsync_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} #{RSYNC_OPTS} #{DIR_TO_BACKUP} #{SSH_USER}@#{SSH_SERVER}:#{BACKUP_ROOT}/current"
 
 logger.info("Started running at: #{Time.now}")
-system "growlnotify -n RRsync -m 'Started running at: #{Time.now}'"
+`growlnotify -t RRsync --image icons/pending.png -m 'Started running at: #{Time.now}'`
 run_time = Benchmark.realtime do
   begin
     raise Exception, "Unable to find remote host (#{SSH_SERVER})" unless Ping.pingecho(SSH_SERVER)
@@ -63,8 +63,8 @@ run_time = Benchmark.realtime do
     FileUtils.rmdir("#{EMPTY_DIR}")
   rescue Errno::EACCES, Errno::ENOENT, Errno::ENOTEMPTY, Exception => e
     logger.fatal(e.to_s)
-    `growlnotify -n RRsync -m 'An error occurred!'`
+    `growlnotify -t RRsync --image icons/fail.png -m 'An error occurred!'`
   end
 end
 logger.info("Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}")
-`growlnotify -n RRsync -m 'Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}'`
+`growlnotify -t RRsync --image icons/pass.png -m 'Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}'`
