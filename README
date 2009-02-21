@@ -19,12 +19,17 @@ A few things are required for this script to function correctly.
 	* Ruby 1.8.x
 	* rsync 3.0.x
 	* ssh command
+	* growlnotify
 	
 Rsync on OS X 10.5:
 
 On OS X 10.5 the default rsync is out of date and missing a few used options you may use macports to install the latest.
 	
 	sudo port install rsync
+
+Growlnotify:
+
+The growl documentation explains how to install this: http://growl.info/documentation/growlnotify.php
 	
 To install the script simply copy it to where ever you wish to run the script from. Make sure its executable by issuing the following:
 
