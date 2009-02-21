@@ -52,18 +52,24 @@ run_time = Benchmark.realtime do
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
       logger.info("#{rsync_cleanout_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
-      logger.error("#{rsync_cleanout_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
+      unless tmp_stderr.empty?
+        logger.error("#{rsync_cleanout_cmd}\n#{tmp_stderr}")
+        `growlnotify -t RRsync --image icons/fail.png -m 'An error occurred: #{tmp_stderr}'`
+      end
     }
     Open3::popen3("#{rsync_cmd}") { |stdin, stdout, stderr|
       tmp_stdout = stdout.read.strip
       tmp_stderr = stderr.read.strip
       logger.info("#{rsync_cmd}\n#{tmp_stdout}") unless tmp_stdout.empty?
-      logger.error("#{rsync_cmd}\n#{tmp_stderr}") unless tmp_stderr.empty?
+      unless tmp_stderr.empty?
+        logger.error("#{rsync_cmd}\n#{tmp_stderr}")
+        `growlnotify -t RRsync --image icons/fail.png -m 'An error occurred: #{tmp_stderr}'`
+      end
     }
     FileUtils.rmdir("#{EMPTY_DIR}")
   rescue Errno::EACCES, Errno::ENOENT, Errno::ENOTEMPTY, Exception => e
     logger.fatal(e.to_s)
-    `growlnotify -t RRsync --image icons/fail.png -m 'An error occurred!'`
+    `growlnotify -t RRsync --image icons/fail.png -m 'An error occurred: #{e.to_s}'`
   end
 end
 logger.info("Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}")
