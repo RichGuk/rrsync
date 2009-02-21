@@ -63,7 +63,8 @@ run_time = Benchmark.realtime do
     FileUtils.rmdir("#{EMPTY_DIR}")
   rescue Errno::EACCES, Errno::ENOENT, Errno::ENOTEMPTY, Exception => e
     logger.fatal(e.to_s)
+    `growlnotify -n RRsync -m 'An error occurred!'`
   end
 end
 logger.info("Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}")
-system "growlnotify -n RRsync -m 'Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}'"
+`growlnotify -n RRsync -m 'Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}'`
