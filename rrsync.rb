@@ -42,6 +42,7 @@ rsync_cleanout_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} --delete -a #{EM
 rsync_cmd = "#{RSYNC_APP} #{RSYNC_VERBOSE} #{ssh_port} #{RSYNC_OPTS} #{DIR_TO_BACKUP} #{SSH_USER}@#{SSH_SERVER}:#{BACKUP_ROOT}/current"
 
 logger.info("Started running at: #{Time.now}")
+system "growlnotify -n RRsync -m 'Started running at: #{Time.now}'"
 run_time = Benchmark.realtime do
   begin
     raise Exception, "Unable to find remote host (#{SSH_SERVER})" unless Ping.pingecho(SSH_SERVER)
@@ -65,3 +66,4 @@ run_time = Benchmark.realtime do
   end
 end
 logger.info("Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}")
+system "growlnotify -n RRsync -m 'Finished running at: #{Time.now} - Execution time: #{run_time.to_s[0, 5]}'"
